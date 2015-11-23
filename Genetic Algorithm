@@ -1,0 +1,139 @@
+import java.text.DecimalFormat;
+import java.util.Random;
+
+
+public class GeneticAlgo 
+{
+	static String menu="C.Label   C.String   D.Integer   C.Fitness   F.Ratio";
+	static String[] label={"X1","X2","X3","X4","X5","X6"};
+	static String[] mainArray=new String[6];
+	static int [] decoded=new int[6];
+	static int [] fitness=new int[6];
+	static double [] ratio=new double[6];
+	//	static String All="";
+
+
+	public static void main(String [] args)
+	{
+
+		int c=0;
+
+		//		System.out.println(mainArray.length);
+		while(c<mainArray.length)
+		{
+			String temp=create6unique();
+			// All=All+temp+" ";
+
+			if(isUnique(temp,c)){
+				mainArray[c]=temp;
+				c++;
+			}
+		}
+
+		decodeToInt();
+		calculateFitness();
+		calculateRatio();
+		printChart();
+
+	}
+
+	
+	
+
+	static String create6unique()
+	{
+		String string="";
+		for(int c=0;c<4;c++)
+		{
+			int random = (int)(Math.random()*2);
+			string=string+random;
+		}
+		return string;
+	}
+
+	static boolean isUnique(String toTest,int countSofar)
+	{
+		if(countSofar==0){
+			return true;
+		}else{
+			for(int c2=0;c2<countSofar;c2++)
+			{
+				//				int temp=Integer.parseInt(mainArray[c]);
+				String temp=mainArray[c2];
+				if(toTest.equals(temp))
+					return false;
+			}
+			return true;
+		}
+	}
+	
+	
+	static void decodeToInt()
+	{
+		for(int c=0;c<mainArray.length;c++)
+		{
+			int stringToBinAndThnDec = Integer.parseInt(mainArray[c], 2);
+			decoded[c]=stringToBinAndThnDec;
+		}
+		
+	}
+	
+	static void calculateFitness() {
+		// TODO Auto-generated method stub
+		for(int c=0;c<mainArray.length;c++)
+		{
+			//15X-X^2
+			int X=decoded[c];
+			int stringToBinAndThnDec =(15*X)-(X*X) ;
+			fitness[c]=stringToBinAndThnDec;
+		}
+		
+	}
+	static void calculateRatio()
+	{
+		int total=0;
+		for(int c=0;c<mainArray.length;c++)
+		{
+			total=total+fitness[c];
+		}
+		
+		for(int c=0;c<mainArray.length;c++)
+		{
+			double temp=(fitness[c]*100.0)/total;
+			ratio[c]=Double.parseDouble(new DecimalFormat("##.##").format(temp));
+		}
+		
+	}
+	
+
+	//////////////////////////////////////////////////////
+	//PRINTING PRESS
+	/////////////////////////////////////////////////////
+	static void printChart()
+	{
+		System.out.println(menu);
+		String decTemp;
+		String fitTemp;
+		
+		
+		for(int c=0;c<mainArray.length;c++)
+		{
+			if(decoded[c]<10){ decTemp="0"+decoded[c];}else{decTemp=""+decoded[c];}
+			if(fitness[c]<10){ fitTemp="0"+fitness[c];}else{fitTemp=""+fitness[c];}
+			
+			System.out.println("   "+label[c]+"       "+mainArray[c]+"        "+decTemp
+					+"          "+fitTemp+"        "+ratio[c]);
+		}
+	}
+	
+	static void printIt(String array[])
+	{
+		for(int c=0;c<array.length;c++)
+		{
+			System.out.print(mainArray[c]+"     ");
+		}
+	}
+	
+
+}
+
